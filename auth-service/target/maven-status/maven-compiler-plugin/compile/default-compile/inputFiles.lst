@@ -10,4 +10,5 @@
 /app/auth-service/src/main/java/com/communityrideshare/auth/domain/User.java
 /app/auth-service/src/main/java/com/communityrideshare/auth/web/dtos/LoginRequest.java
 /app/auth-service/src/main/java/com/communityrideshare/auth/AuthServiceApplication.java
+/app/auth-service/src/main/java/com/communityrideshare/auth/config/ApplicationConfig.java
 /app/auth-service/src/main/java/com/communityrideshare/auth/domain/RefreshToken.java
