@@ -10,20 +10,34 @@ services:
       - POSTGRES_USER=authuser
       - POSTGRES_PASSWORD=authpassword
       - POSTGRES_DB=auth_db
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
     networks:
       - community_ride_share_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U authuser -d auth_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   user-db:
     image: postgres:14-alpine
     container_name: user-db
     ports:
-      - "5432:5432"
+      - "5433:5432" # Changed port to avoid conflicts
     environment:
       - POSTGRES_USER=useruser
       - POSTGRES_PASSWORD=userpassword
       - POSTGRES_DB=user_db
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
     networks:
       - community_ride_share_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U useruser -d user_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   auth-service:
     build:
@@ -32,7 +46,8 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - auth-db
+      auth-db:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://auth-db:5432/auth_db
       - SPRING_DATASOURCE_USERNAME=authuser
@@ -48,7 +63,8 @@ services:
     ports:
       - "8082:8082"
     depends_on:
-      - user-db
+      user-db:
+        condition: service_healthy
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://user-db:5432/user_db
       - SPRING_DATASOURCE_USERNAME=useruser
@@ -72,3 +88,7 @@ services:
 networks:
   community_ride_share_network:
     driver: bridge
+
+volumes:
+  auth_db_data:
+  user_db_data:
