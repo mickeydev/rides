@@ -17,10 +17,10 @@ The application is built using a microservices architecture, with each service r
 
 - `auth-service`: Handles user registration, login, and JWT-based authentication.
 - `user-service`: Manages user profiles and vehicle information.
+- `ride-service`: Manages ride requests, matching, and tracking.
+- `payment-service`: Handles payment tracking and earnings.
+- `rating-service`: Manages ratings and feedback.
 - `api-gateway`: The single entry point for all client requests, routing them to the appropriate backend service.
-- `ride-service`: (To be implemented) Manages ride requests, matching, and tracking.
-- `payment-service`: (To be implemented) Handles payment tracking and earnings.
-- `rating-service`: (To be implemented) Manages ratings and feedback.
 - `notification-service`: (To be implemented) Sends notifications to users.
 
 ## Getting Started
@@ -71,18 +71,19 @@ Follow these instructions to get the project running on your local machine.
 
 ### API Endpoints
 
-The API Gateway is the single entry point for all requests. It is available at `http://localhost:8080`.
+The API Gateway is the single entry point for all requests. It is available at `http://localhost:8080`. All API routes are prefixed with `/api`.
 
-#### Auth Service
+#### Auth Service (`/api/auth`)
 
 -   **Sign Up**: `POST /api/auth/signup`
     -   Body: `{ "email": "user@example.com", "password": "password" }`
 -   **Login**: `POST /api/auth/login`
     -   Body: `{ "email": "user@example.com", "password": "password" }`
 
-#### User Service
+#### User Service (`/api/users`)
 
 -   **Create Profile**: `POST /api/users/{userId}`
+    -   **Note**: `{userId}` must match the ID from the Auth service.
     -   Body: `{ "fullName": "John Doe", "phone": "123-456-7890", "role": "PASSENGER" }`
 -   **Get Profile**: `GET /api/users/{userId}`
 -   **Update Profile**: `PUT /api/users/{userId}`
@@ -91,7 +92,25 @@ The API Gateway is the single entry point for all requests. It is available at `
     -   Body: `{ "make": "Toyota", "model": "Camry", "licensePlate": "123-ABC", "seatsAvailable": 4 }`
 -   **Get Vehicles**: `GET /api/users/{userId}/vehicles`
 
-**Note:** For the User Service endpoints, `{userId}` should be the UUID of the user created by the Auth Service.
+#### Ride Service (`/api/rides`)
+
+-   **Request a Ride**: `POST /api/rides`
+    -   Body: `{ "passengerId": "...", "pickupLocation": { "latitude": ..., "longitude": ... }, "dropoffLocation": { "latitude": ..., "longitude": ... } }`
+-   **Get Ride Details**: `GET /api/rides/{rideId}`
+-   **Get Available Ride Requests**: `GET /api/rides/requests` (For drivers)
+-   **Accept a Ride**: `POST /api/rides/{rideId}/accept` (For drivers)
+    -   Body: `{ "driverId": "..." }`
+
+#### Payment Service (`/api/payments`)
+
+-   **Process a Transaction**: `POST /api/payments`
+    -   **Note**: For MVP, this just logs a transaction and updates earnings.
+    -   Body: `{ "rideId": "...", "payerId": "...", "payeeId": "...", "amount": ... }`
+
+#### Rating Service (`/api/ratings`)
+
+-   **Submit a Rating**: `POST /api/ratings`
+    -   Body: `{ "rideId": "...", "ratedBy": "...", "ratedUser": "...", "rating": 5, "comment": "Great driver!" }`
 
 ### Connecting to the Databases
 
