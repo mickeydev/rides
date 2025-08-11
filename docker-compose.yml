@@ -24,7 +24,7 @@ services:
     image: postgres:14-alpine
     container_name: user-db
     ports:
-      - "5433:5432" # Changed port to avoid conflicts
+      - "5433:5432"
     environment:
       - POSTGRES_USER=useruser
       - POSTGRES_PASSWORD=userpassword
@@ -35,6 +35,25 @@ services:
       - community_ride_share_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U useruser -d user_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ride-db:
+    image: postgis/postgis:14-3.4
+    container_name: ride-db
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=rideuser
+      - POSTGRES_PASSWORD=ridepassword
+      - POSTGRES_DB=ride_db
+    volumes:
+      - ride_db_data:/var/lib/postgresql/data
+    networks:
+      - community_ride_share_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rideuser -d ride_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -73,6 +92,23 @@ services:
     networks:
       - community_ride_share_network
 
+  ride-service:
+    build:
+      context: ./ride-service
+    container_name: ride-service
+    ports:
+      - "8083:8083"
+    depends_on:
+      ride-db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://ride-db:5432/ride_db
+      - SPRING_DATASOURCE_USERNAME=rideuser
+      - SPRING_DATASOURCE_PASSWORD=ridepassword
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    networks:
+      - community_ride_share_network
+
   api-gateway:
     build:
       context: ./api-gateway
@@ -82,6 +118,7 @@ services:
     depends_on:
       - auth-service
       - user-service
+      - ride-service
     networks:
       - community_ride_share_network
 
@@ -92,3 +129,4 @@ networks:
 volumes:
   auth_db_data:
   user_db_data:
+  ride_db_data:

@@ -1,0 +1,10 @@
+com/communityrideshare/ride/RideServiceApplication.class
+com/communityrideshare/ride/domain/RideEvent.class
+com/communityrideshare/ride/domain/Ride$RideStatus.class
+com/communityrideshare/ride/web/dtos/RideRequest.class
+com/communityrideshare/ride/repository/RideEventRepository.class
+com/communityrideshare/ride/service/RideService.class
+com/communityrideshare/ride/domain/Ride.class
+com/communityrideshare/ride/web/dtos/PointDTO.class
+com/communityrideshare/ride/repository/RideRepository.class
+com/communityrideshare/ride/web/RideController.class
