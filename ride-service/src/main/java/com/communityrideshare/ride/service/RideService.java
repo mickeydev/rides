@@ -12,6 +12,7 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -28,9 +29,7 @@ public class RideService {
         ride.setPickupLocation(createPoint(request.getPickupLocation()));
         ride.setDropoffLocation(createPoint(request.getDropoffLocation()));
         ride.setPickupTime(request.getPickupTime());
-        // For now, we'll assign a dummy driver ID. In a real scenario, this would be null
-        // until a driver accepts the ride.
-        ride.setDriverId(UUID.randomUUID());
+        ride.setStatus(Ride.RideStatus.REQUESTED);
         return rideRepository.save(ride);
     }
 
@@ -38,6 +37,22 @@ public class RideService {
     public Ride getRide(UUID rideId) {
         return rideRepository.findById(rideId)
                 .orElseThrow(() -> new RuntimeException("Ride not found")); // Replace with a proper exception
+    }
+
+    @Transactional(readOnly = true)
+    public List<Ride> getAvailableRides() {
+        return rideRepository.findByStatus(Ride.RideStatus.REQUESTED);
+    }
+
+    @Transactional
+    public Ride acceptRide(UUID rideId, UUID driverId) {
+        Ride ride = getRide(rideId);
+        if (ride.getStatus() != Ride.RideStatus.REQUESTED) {
+            throw new IllegalStateException("Ride is not available to be accepted.");
+        }
+        ride.setDriverId(driverId);
+        ride.setStatus(Ride.RideStatus.ACCEPTED);
+        return rideRepository.save(ride);
     }
 
     private Point createPoint(PointDTO dto) {

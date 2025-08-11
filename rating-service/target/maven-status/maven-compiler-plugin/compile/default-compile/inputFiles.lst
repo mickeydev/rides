@@ -1,0 +1,6 @@
+/app/rating-service/src/main/java/com/communityrideshare/rating/service/RatingService.java
+/app/rating-service/src/main/java/com/communityrideshare/rating/web/dtos/RatingRequest.java
+/app/rating-service/src/main/java/com/communityrideshare/rating/domain/Rating.java
+/app/rating-service/src/main/java/com/communityrideshare/rating/web/RatingController.java
+/app/rating-service/src/main/java/com/communityrideshare/rating/repository/RatingRepository.java
+/app/rating-service/src/main/java/com/communityrideshare/rating/RatingServiceApplication.java

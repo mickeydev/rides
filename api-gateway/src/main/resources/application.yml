@@ -25,3 +25,15 @@ spring:
             - Path=/api/rides/**
           filters:
             - StripPrefix=1
+        - id: payment-service-route
+          uri: http://payment-service:8084
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - StripPrefix=1
+        - id: rating-service-route
+          uri: http://rating-service:8085
+          predicates:
+            - Path=/api/ratings/**
+          filters:
+            - StripPrefix=1

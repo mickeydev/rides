@@ -11,4 +11,5 @@ import java.util.UUID;
 public interface RideRepository extends JpaRepository<Ride, UUID> {
     List<Ride> findByDriverId(UUID driverId);
     List<Ride> findByPassengerId(UUID passengerId);
+    List<Ride> findByStatus(Ride.RideStatus status);
 }
