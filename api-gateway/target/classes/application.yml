@@ -8,49 +8,6 @@ spring:
     gateway:
       routes:
         - id: auth-service-route
-          uri: lb://auth-service
-          predicates:
-            - Path=/api/auth/**
-          filters:
-            - StripPrefix=2 # Strips /api/auth and forwards the rest
-        - id: user-service-route
-          uri: lb://user-service
-          predicates:
-            - Path=/api/users/**
-          filters:
-            - StripPrefix=2 # Strips /api/users and forwards the rest
-
-# Using service names as hosts with load balancing
-# Make sure to use lb:// when referring to services by name
-# auth-service is available at auth-service:8081 inside the docker network
-# user-service is available at user-service:8082 inside the docker network
-# The uri for auth-service should be lb://auth-service and for user-service lb://user-service
-# Spring Cloud Gateway will resolve the service name to the correct host and port.
-# However, for this to work without a discovery service like Eureka, we need to provide the host and port.
-# Let's use direct hostnames for now as we don't have a discovery client configured.
-# Let's correct the uris to use the service names and ports directly.
-# No, the `lb` scheme should work with Docker's DNS. Let's stick with that.
-# After re-reading the Spring Cloud Gateway docs, `lb://` requires a DiscoveryClient.
-# Since we don't have one, I should use direct hostnames.
-# The hostnames are the service names in docker-compose.
-# So `http://auth-service:8081` and `http://user-service:8082`.
-# Let me correct the file content.
-#
-# The StripPrefix filter is also tricky.
-# Path=/api/auth/** and StripPrefix=2 will turn /api/auth/login into /login. This is wrong.
-# It should be /auth/login. So StripPrefix=1 is correct. It will strip /api.
-
-# Corrected configuration:
-server:
-  port: 8080
-
-spring:
-  application:
-    name: api-gateway
-  cloud:
-    gateway:
-      routes:
-        - id: auth-service-route
           uri: http://auth-service:8081
           predicates:
             - Path=/api/auth/**
@@ -60,5 +17,23 @@ spring:
           uri: http://user-service:8082
           predicates:
             - Path=/api/users/**
+          filters:
+            - StripPrefix=1
+        - id: ride-service-route
+          uri: http://ride-service:8083
+          predicates:
+            - Path=/api/rides/**
+          filters:
+            - StripPrefix=1
+        - id: payment-service-route
+          uri: http://payment-service:8084
+          predicates:
+            - Path=/api/payments/**
+          filters:
+            - StripPrefix=1
+        - id: rating-service-route
+          uri: http://rating-service:8085
+          predicates:
+            - Path=/api/ratings/**
           filters:
             - StripPrefix=1
