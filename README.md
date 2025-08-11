@@ -92,3 +92,27 @@ The API Gateway is the single entry point for all requests. It is available at `
 -   **Get Vehicles**: `GET /api/users/{userId}/vehicles`
 
 **Note:** For the User Service endpoints, `{userId}` should be the UUID of the user created by the Auth Service.
+
+### Connecting to the Databases
+
+The services use PostgreSQL databases running in Docker containers. You can connect to them directly from your host machine using any standard PostgreSQL client (e.g., DBeaver, DataGrip, `psql`).
+
+Here are the connection details for each database:
+
+| Service         | Host        | Port | Database        | Username      | Password        |
+|-----------------|-------------|------|-----------------|---------------|-----------------|
+| **auth-db**     | `localhost` | 5431 | `auth_db`       | `authuser`    | `authpassword`  |
+| **user-db**     | `localhost` | 5433 | `user_db`       | `useruser`    | `userpassword`  |
+| **ride-db**     | `localhost` | 5434 | `ride_db`       | `rideuser`    | `ridepassword`  |
+| **payment-db**  | `localhost` | 5435 | `payment_db`    | `paymentuser` | `paymentpassword` |
+| **rating-db**   | `localhost` | 5436 | `rating_db`     | `ratinguser`  | `ratingpassword`|
+
+**Example using `psql`:**
+
+To connect to the `auth-db` using the `psql` command-line tool, you can run:
+
+```bash
+psql -h localhost -p 5431 -U authuser -d auth_db
+```
+
+You will be prompted for the password (`authpassword`). You can use similar commands to connect to the other databases by changing the port, username, and database name accordingly.
