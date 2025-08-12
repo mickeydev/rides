@@ -1,0 +1,8 @@
+com/communityrideshare/notification/repository/NotificationRepository.class
+com/communityrideshare/notification/domain/Notification.class
+com/communityrideshare/notification/domain/Notification$NotificationType.class
+com/communityrideshare/notification/listener/dto/RideAcceptedEvent.class
+com/communityrideshare/notification/service/NotificationService.class
+com/communityrideshare/notification/NotificationServiceApplication.class
+com/communityrideshare/notification/config/RabbitMQConfig.class
+com/communityrideshare/notification/listener/RideEventListener.class

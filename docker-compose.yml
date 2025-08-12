@@ -96,6 +96,34 @@ services:
       timeout: 5s
       retries: 5
 
+  notification-db:
+    image: postgres:14-alpine
+    container_name: notification-db
+    ports:
+      - "5437:5432"
+    environment:
+      - POSTGRES_USER=notificationuser
+      - POSTGRES_PASSWORD=notificationpassword
+      - POSTGRES_DB=notification_db
+    volumes:
+      - notification_db_data:/var/lib/postgresql/data
+    networks:
+      - community_ride_share_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U notificationuser -d notification_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"  # AMQP protocol
+      - "15672:15672" # Management UI
+    networks:
+      - community_ride_share_network
+
   auth-service:
     build:
       context: ./auth-service
@@ -139,11 +167,14 @@ services:
     depends_on:
       ride-db:
         condition: service_healthy
+      rabbitmq:
+        condition: service_started # RabbitMQ health check is more complex, so we'll just wait for it to start
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ride-db:5432/ride_db
       - SPRING_DATASOURCE_USERNAME=rideuser
       - SPRING_DATASOURCE_PASSWORD=ridepassword
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_RABBITMQ_HOST=rabbitmq
     networks:
       - community_ride_share_network
 
@@ -181,6 +212,26 @@ services:
     networks:
       - community_ride_share_network
 
+  notification-service:
+    build:
+      context: ./notification-service
+    container_name: notification-service
+    ports:
+      - "8086:8086"
+    depends_on:
+      notification-db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://notification-db:5432/notification_db
+      - SPRING_DATASOURCE_USERNAME=notificationuser
+      - SPRING_DATASOURCE_PASSWORD=notificationpassword
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_RABBITMQ_HOST=rabbitmq
+    networks:
+      - community_ride_share_network
+
   api-gateway:
     build:
       context: ./api-gateway
@@ -193,6 +244,7 @@ services:
       - ride-service
       - payment-service
       - rating-service
+      - notification-service
     networks:
       - community_ride_share_network
 
@@ -206,3 +258,4 @@ volumes:
   ride_db_data:
   payment_db_data:
   rating_db_data:
+  notification_db_data:

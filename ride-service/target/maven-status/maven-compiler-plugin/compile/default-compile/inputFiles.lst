@@ -1,8 +1,11 @@
 /app/ride-service/src/main/java/com/communityrideshare/ride/repository/RideEventRepository.java
 /app/ride-service/src/main/java/com/communityrideshare/ride/service/RideService.java
 /app/ride-service/src/main/java/com/communityrideshare/ride/web/RideController.java
+/app/ride-service/src/main/java/com/communityrideshare/ride/config/RabbitMQConfig.java
 /app/ride-service/src/main/java/com/communityrideshare/ride/web/dtos/RideRequest.java
 /app/ride-service/src/main/java/com/communityrideshare/ride/domain/RideEvent.java
+/app/ride-service/src/main/java/com/communityrideshare/ride/service/dto/RideAcceptedEvent.java
+/app/ride-service/src/main/java/com/communityrideshare/ride/web/dtos/AcceptRideRequest.java
 /app/ride-service/src/main/java/com/communityrideshare/ride/RideServiceApplication.java
 /app/ride-service/src/main/java/com/communityrideshare/ride/web/dtos/PointDTO.java
 /app/ride-service/src/main/java/com/communityrideshare/ride/repository/RideRepository.java

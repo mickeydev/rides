@@ -1,0 +1,7 @@
+/app/notification-service/src/main/java/com/communityrideshare/notification/listener/dto/RideAcceptedEvent.java
+/app/notification-service/src/main/java/com/communityrideshare/notification/NotificationServiceApplication.java
+/app/notification-service/src/main/java/com/communityrideshare/notification/domain/Notification.java
+/app/notification-service/src/main/java/com/communityrideshare/notification/config/RabbitMQConfig.java
+/app/notification-service/src/main/java/com/communityrideshare/notification/service/NotificationService.java
+/app/notification-service/src/main/java/com/communityrideshare/notification/repository/NotificationRepository.java
+/app/notification-service/src/main/java/com/communityrideshare/notification/listener/RideEventListener.java
