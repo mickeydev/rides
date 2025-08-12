@@ -1,6 +1,0 @@
-com/communityrideshare/rating/web/dtos/RatingRequest.class
-com/communityrideshare/rating/RatingServiceApplication.class
-com/communityrideshare/rating/domain/Rating.class
-com/communityrideshare/rating/repository/RatingRepository.class
-com/communityrideshare/rating/service/RatingService.class
-com/communityrideshare/rating/web/RatingController.class

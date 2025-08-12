@@ -23,6 +23,15 @@ The application is built using a microservices architecture, with each service r
 - `api-gateway`: The single entry point for all client requests, routing them to the appropriate backend service.
 - `notification-service`: (To be implemented) Sends notifications to users.
 
+### Project Structure
+
+The project is organized into two main directories:
+
+-   `backend/`: Contains all the Spring Boot microservices.
+-   `frontend/`: Contains the client-side applications (e.g., the React Native mobile app).
+
+All `docker-compose` commands should be run from the root of the project.
+
 ## Getting Started
 
 Follow these instructions to get the project running on your local machine.

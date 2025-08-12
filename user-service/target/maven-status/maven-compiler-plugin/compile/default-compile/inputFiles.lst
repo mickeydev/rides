@@ -1,9 +1,0 @@
-/app/user-service/src/main/java/com/communityrideshare/user/web/dtos/VehicleRequest.java
-/app/user-service/src/main/java/com/communityrideshare/user/repository/VehicleRepository.java
-/app/user-service/src/main/java/com/communityrideshare/user/web/dtos/ProfileRequest.java
-/app/user-service/src/main/java/com/communityrideshare/user/domain/Profile.java
-/app/user-service/src/main/java/com/communityrideshare/user/UserServiceApplication.java
-/app/user-service/src/main/java/com/communityrideshare/user/repository/ProfileRepository.java
-/app/user-service/src/main/java/com/communityrideshare/user/service/ProfileService.java
-/app/user-service/src/main/java/com/communityrideshare/user/web/ProfileController.java
-/app/user-service/src/main/java/com/communityrideshare/user/domain/Vehicle.java

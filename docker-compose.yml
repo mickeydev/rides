@@ -119,14 +119,14 @@ services:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq
     ports:
-      - "5672:5672"  # AMQP protocol
-      - "15672:15672" # Management UI
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - community_ride_share_network
 
   auth-service:
     build:
-      context: ./auth-service
+      context: ./backend/auth-service
     container_name: auth-service
     ports:
       - "8081:8081"
@@ -143,7 +143,7 @@ services:
 
   user-service:
     build:
-      context: ./user-service
+      context: ./backend/user-service
     container_name: user-service
     ports:
       - "8082:8082"
@@ -160,7 +160,7 @@ services:
 
   ride-service:
     build:
-      context: ./ride-service
+      context: ./backend/ride-service
     container_name: ride-service
     ports:
       - "8083:8083"
@@ -168,7 +168,7 @@ services:
       ride-db:
         condition: service_healthy
       rabbitmq:
-        condition: service_started # RabbitMQ health check is more complex, so we'll just wait for it to start
+        condition: service_started
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ride-db:5432/ride_db
       - SPRING_DATASOURCE_USERNAME=rideuser
@@ -180,7 +180,7 @@ services:
 
   payment-service:
     build:
-      context: ./payment-service
+      context: ./backend/payment-service
     container_name: payment-service
     ports:
       - "8084:8084"
@@ -197,7 +197,7 @@ services:
 
   rating-service:
     build:
-      context: ./rating-service
+      context: ./backend/rating-service
     container_name: rating-service
     ports:
       - "8085:8085"
@@ -214,7 +214,7 @@ services:
 
   notification-service:
     build:
-      context: ./notification-service
+      context: ./backend/notification-service
     container_name: notification-service
     ports:
       - "8086:8086"
@@ -234,7 +234,7 @@ services:
 
   api-gateway:
     build:
-      context: ./api-gateway
+      context: ./backend/api-gateway
     container_name: api-gateway
     ports:
       - "8080:8080"
